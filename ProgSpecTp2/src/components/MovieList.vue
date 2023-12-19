@@ -77,6 +77,7 @@ export default {
     },
   },
   mounted() {
+    document.title = 'Liste de films Page ' + this.pageNumber + ' - TP2'
     getMovie(this.selectedMovie).then(response => this.movieDetailed = response);
   },
 };
