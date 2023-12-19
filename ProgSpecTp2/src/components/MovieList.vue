@@ -5,29 +5,31 @@
     <button @click="prevPage" :disabled="pageNumber === 1">
       &lt; Previous
     </button>
-    Page {{ pageNumber }}
+    Page {{ pageNumber }} of {{pageCount}}
     <button @click="nextPage" :disabled="pageNumber >= pageCount">
       Next &gt;
     </button>
     <ul class="movies">
       <li
-        v-for="movie in paginatedMovies"
-        :key="movie.id"
-        v-bind:class="{
+          v-for="movie in paginatedMovies"
+          :key="movie.id"
+          v-bind:class="{
           discontinued: movie.discontinued,
           selected: selectedMovie === movie,
         }"
-        @click="onSelect(movie)"
+          @click="onSelect(movie)"
       >
-        <span class="name">{{ movie.name }}</span>
-        <span class="description">{{ movie.description }}</span>
-        <span class="price">{{ movie.price }}</span>
+        <span class="pop"><img :src="movie.poster_path ? movie.poster_path : 'https://placehold.co/100x100'" width="100"  style="float: left" /></span>
+        <span class="title">{{ movie.title }}</span>
+        <span class="date">{{ movie.release_date }}</span>
       </li>
     </ul>
   </div>
 </template>
 
 <script>
+import { getMovie } from '@/services/MovieService.js';
+
 export default {
   props: {
     movies: {
@@ -54,7 +56,7 @@ export default {
     },
     paginatedMovies() {
       const start = (this.pageNumber - 1) * this.pageSize,
-        end = start + this.pageSize;
+          end = start + this.pageSize;
       return this.movies.slice(start, end);
     },
   },
@@ -62,14 +64,20 @@ export default {
     nextPage() {
       this.pageNumber++;
       this.selectedMovie = null;
+      document.title = 'Liste de films Page ' + this.pageNumber + ' - TP2'
     },
     prevPage() {
       this.pageNumber--;
       this.selectedMovie = null;
+      document.title = 'Liste de films Page ' + this.pageNumber + ' - TP2'
     },
     onSelect(movie) {
-      this.$router.push({ name: "movie", params: { id: movie.id } });
+      this.selectedMovie = movie;
+      this.$router.push({ name: "movie", params: { id: movie.id, title: movie.title } });
     },
+  },
+  mounted() {
+    getMovie(this.selectedMovie).then(response => this.movieDetailed = response);
   },
 };
 </script>
@@ -87,7 +95,7 @@ export default {
   background-color: #eee;
   margin: 0.5em;
   padding: 0.3em 0em;
-  height: 1.8em;
+  height: 8em;
   border-radius: 4px;
 }
 .movies li:hover {
@@ -95,8 +103,8 @@ export default {
   background-color: yellow;
   left: 0.1em;
 }
-.movies li:hover .name,
-.movies li:hover .price {
+.movies li:hover .pop,
+.movies li:hover .date {
   color: #607d8b;
   background-color: #ffd800;
   left: 0.1em;
@@ -108,8 +116,8 @@ export default {
 .movies li.selected:hover {
   color: white;
 }
-.movies li.selected .name,
-.movies li.selected .price {
+.movies li.selected .pop,
+.movies li.selected .date {
   background-color: #0026ff;
   color: white;
 }
@@ -117,7 +125,7 @@ export default {
   position: relative;
   top: -3px;
 }
-.movies .name {
+.movies .pop {
   display: inline-block;
   color: white;
   padding: 0.5em 0.7em 0em 0.7em;
@@ -126,7 +134,7 @@ export default {
   position: relative;
   left: -1px;
   top: -4px;
-  height: 1.8em;
+  height: 8em;
   margin-right: 0.8em;
   border-radius: 4px 0px 0px 4px;
   width: 30%;
@@ -134,7 +142,7 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.movies .price {
+.movies .date {
   float: right;
   width: 15%;
   color: white;
@@ -144,20 +152,17 @@ export default {
   position: relative;
   left: -1px;
   top: -4px;
-  height: 1.8em;
+  height: 8em;
   margin-left: 0.8em;
   border-radius: 0px 4px 4px 0px;
 }
-.movies .description {
-  height: 1.8em;
+.movies .title {
+  height: 8em;
   display: inline-block;
   width: 40%;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-.movies .discontinued,
-.movies .discontinued * {
-  color: red !important;
+  color: black;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <MovieList :movies="movies" :page-size="5"></MovieList>
+  <MovieList :movies="movies" :page-size="10"></MovieList>
 </template>
 
 <script>
