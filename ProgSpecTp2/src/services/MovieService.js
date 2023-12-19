@@ -42,5 +42,7 @@ export async function getAllMovies() {
 }
 
 export async function getMovie(id) {
-
+    const response = await fetch(url + RESOURCE_NAME + '/' + id, options);
+    const movie = await response.json();
+    return movie;
 }

@@ -1,13 +1,12 @@
 <template>
-    <h1>Id: {{ id }}</h1>
-  <h2>{{ movieList.name }}</h2>
-  <img
-    :src="movie.imageUrl ? movie.imageUrl : 'https://placeimg.com/200/200/tech'" width="200"  style="float: right" />
-  <h3>{{ movie.description }}</h3>
-  <p>Prix: {{ movie.price }}</p>
-  <p>Prix fixe? {{ movie.fixedPrice }}</p>
-  <p>Discontinué? {{ movie.discontinued }}</p>
-  <p>Date de modification: {{ movie.modifiedDate }}</p>
+  <h1>Id: {{ id }}</h1>
+  <h2>{{ movie.title }}</h2>
+  <img :src="movie.poster_path ? movie.poster_path : 'https://placehold.co/200x200'" width="200"  style="float: right" />
+  <h3>{{ movie.vote_average }}/10</h3>
+  <p>Date de sortie: {{ movie.release_date }}</p>
+  <p>Synopsis: {{ movie.overview }}</p>
+  <p>Durée: {{ movie.runtime }}</p>
+  <p>Site web: {{ movie.homepage }}</p>
 </template>
 
 <script>
@@ -31,7 +30,10 @@ export default {
     },
   },
   mounted() {
-    getMovie(this.id).then(response => this.movie = response);
+    getMovie(this.id).then(response => {
+      this.movie = response;
+      document.title = 'Fiche de ' + this.movie.title + ' - TP2';
+    });
   },
 };
 </script>
