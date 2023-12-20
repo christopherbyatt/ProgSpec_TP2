@@ -33,7 +33,7 @@ export default {
     getMovie(this.id).then(response => {
       this.movie = response;
       console.log(this.movie);
-      document.title = 'Fiche de ' + this.movie.title + ' - TP2';
+      document.title = 'Fiche de ' + this.movie.title + ' - TP2 Prog Spec';
     });
   },
   // methods: {

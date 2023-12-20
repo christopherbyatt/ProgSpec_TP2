@@ -10,6 +10,7 @@
     <br/>
     <button @click="toggleResultsOrder">Trier par {{ this.nomToggle }}</button>
     <br/>
+    <p>{{ this.arrayMovies.length }} résultats</p>
     <button @click="prevPage" :disabled="pageNumber === 1">
       &lt; Previous
     </button>
@@ -101,6 +102,10 @@ export default {
 
       this.arrayMovies = filteredMovies;
 
+      if(document.title !== 'Accueil - TP2 Prog Spec') {
+        document.title = 'Liste de films Page ' + this.pageNumber + ' - TP2 Prog Spec'
+      }
+
       return filteredMovies.slice(start, end);
     },
   },
@@ -108,12 +113,10 @@ export default {
     nextPage() {
       this.pageNumber++;
       this.selectedMovie = null;
-      document.title = 'Liste de films Page ' + this.pageNumber + ' - TP2'
     },
     prevPage() {
       this.pageNumber--;
       this.selectedMovie = null;
-      document.title = 'Liste de films Page ' + this.pageNumber + ' - TP2'
     },
     onSelect(movie) {
       this.selectedMovie = movie;

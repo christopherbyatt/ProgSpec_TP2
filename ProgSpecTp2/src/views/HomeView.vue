@@ -1,22 +1,32 @@
 <template>
   <main>
     <h1>Accueil</h1>
+    <MovieList :movies="movies" :page-size="3"></MovieList>
   </main>
 </template>
 
 <script>
+import MovieList from "@/components/MovieList.vue";
+import { getNewestMovies } from '@/services/MovieService.js';
+
 export default {
+  components: {
+    MovieList,
+  },
   computed: {
 
   },
   data() {
-
+    return {
+      movies: []
+    }
   },
   props: {
 
   },
   mounted() {
-    document.title = 'TP2 Prog Spec Accueil';
+    getNewestMovies().then(response => this.movies = response);
+    document.title = 'Accueil - TP2 Prog Spec';
   },
 };
 </script>

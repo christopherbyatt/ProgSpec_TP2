@@ -4,6 +4,26 @@
   </div>
 </template>
 
+<script>
+export default {
+  components: {
+
+  },
+  computed: {
+
+  },
+  data() {
+
+  },
+  props: {
+
+  },
+  mounted() {
+    document.title = 'À Propos - TP2 Prog Spec';
+  },
+};
+</script>
+
 <style>
 @media (min-width: 1024px) {
   .about {
