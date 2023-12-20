@@ -56,6 +56,7 @@ export default {
       pageNumber: 1,
       genres: [],
       selectedGenre: false,
+      message: "",
     };
   },
   computed: {
@@ -74,6 +75,13 @@ export default {
 
       const start = (this.pageNumber - 1) * this.pageSize;
       const end = start + this.pageSize;
+
+      if(filteredMovies.length === 0) {
+        this.message = "Oops! Il semblerait qu'aucun résultat ne corresponde à votre recherche.";
+      }
+      else {
+        this.message = "";
+      }
 
       return filteredMovies.slice(start, end);
     },
