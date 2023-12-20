@@ -30,6 +30,7 @@ export async function getAllMovies() {
             aMovie.overview = aMovieDetails.overview;
             aMovie.runtime = aMovieDetails.runtime;
             aMovie.homepage = aMovieDetails.homepage;
+            aMovie.genres = aMovieDetails.genres;
         });
 
         // Wait for all promises to resolve

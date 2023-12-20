@@ -2,14 +2,15 @@
 <template>
   <div>
     <h2>{{ title }}</h2>
-    <button @click="prevPage" :disabled="pageNumber === 1">
-      &lt; Previous
-    </button>
     <label for="genre">Select Genre:</label>
     <select id="genre" v-model="selectedGenre" @change="filterByGenre">
       <option value="">Tous les genres</option>
       <option v-for="genre in genres" :key="genre" :value="genre">{{ genre }}</option>
     </select>
+    <br/>
+    <button @click="prevPage" :disabled="pageNumber === 1">
+      &lt; Previous
+    </button>
     Page {{ pageNumber }} of {{pageCount}}
     <button @click="nextPage" :disabled="pageNumber >= pageCount">
       Next &gt;
@@ -29,6 +30,7 @@
         <span class="date">{{ movie.release_date }}</span>
       </li>
     </ul>
+    <p>{{ this.message }}</p>
   </div>
 </template>
 
@@ -53,10 +55,11 @@ export default {
       selectedMovie: null,
       pageNumber: 1,
       genres: [],
+      selectedGenre: false,
     };
   },
   computed: {
-    selectedGenre: false,
+    // selectedGenre: false,
     pageCount() {
       let nbMovies = this.movies.length;
       return Math.floor(nbMovies / this.pageSize);
@@ -65,7 +68,7 @@ export default {
       let filteredMovies = this.movies;
       if (this.selectedGenre) {
         filteredMovies = filteredMovies.filter(movie => {
-          return movie.genres.includes(this.selectedGenre);
+          return movie.genres && movie.genres.length > 0 && movie.genres.some(genre => genre.name === this.selectedGenre);
         });
       }
 
