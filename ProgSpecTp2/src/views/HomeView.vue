@@ -1,6 +1,8 @@
 <template>
   <main>
     <h1>Accueil</h1>
+    <p>Bienvenue sur notre site de critiques de films.</p>
+    <br/>
     <MovieList :movies="movies" :page-size="3"></MovieList>
   </main>
 </template>
