@@ -8,6 +8,8 @@
       <option v-for="genre in genres" :key="genre" :value="genre">{{ genre }}</option>
     </select>
     <br/>
+    <button @click="toggleResultsOrder">Trier par {{ this.nomToggle }}</button>
+    <br/>
     <button @click="prevPage" :disabled="pageNumber === 1">
       &lt; Previous
     </button>
@@ -57,6 +59,8 @@ export default {
       genres: [],
       selectedGenre: false,
       message: "",
+      nomToggle: "date de sortie ascendant",
+      valeurToggle: "descendant"
     };
   },
   computed: {
@@ -70,6 +74,17 @@ export default {
       if (this.selectedGenre) {
         filteredMovies = filteredMovies.filter(movie => {
           return movie.genres && movie.genres.length > 0 && movie.genres.some(genre => genre.name === this.selectedGenre);
+        });
+      }
+
+      if (this.valeurToggle === 'descendant') {
+        filteredMovies = filteredMovies.sort(function (a, b) {
+          return a.release_date <= b.release_date;
+        });
+      }
+      else if (this.valeurToggle === 'ascendant') {
+        filteredMovies = filteredMovies.sort(function (a, b) {
+          return a.release_date >= b.release_date;
         });
       }
 
@@ -105,6 +120,16 @@ export default {
       this.pageNumber = 1;
       this.selectedMovie = null;
     },
+    toggleResultsOrder() {
+      if(this.nomToggle === 'date de sortie descendant') {
+        this.nomToggle = 'date de sortie ascendant';
+        this.valeurToggle = 'descendant';
+      }
+      else {
+        this.nomToggle = 'date de sortie descendant';
+        this.valeurToggle = 'ascendant';
+      }
+    }
   },
   mounted() {
     document.title = 'Liste de films Page ' + this.pageNumber + ' - TP2'
