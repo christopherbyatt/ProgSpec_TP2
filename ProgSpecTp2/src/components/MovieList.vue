@@ -5,6 +5,11 @@
     <button @click="prevPage" :disabled="pageNumber === 1">
       &lt; Previous
     </button>
+    <label for="genre">Select Genre:</label>
+    <select id="genre" v-model="selectedGenre" @change="filterByGenre">
+      <option value="">Tous les genres</option>
+      <option v-for="genre in genres" :key="genre" :value="genre">{{ genre }}</option>
+    </select>
     Page {{ pageNumber }} of {{pageCount}}
     <button @click="nextPage" :disabled="pageNumber >= pageCount">
       Next &gt;
@@ -47,6 +52,7 @@ export default {
       title: "Films",
       selectedMovie: null,
       pageNumber: 1,
+      genres: [],
     };
   },
   computed: {
@@ -55,9 +61,19 @@ export default {
       return Math.floor(nbMovies / this.pageSize);
     },
     paginatedMovies() {
-      const start = (this.pageNumber - 1) * this.pageSize,
-          end = start + this.pageSize;
-      return this.movies.slice(start, end);
+      let filteredMovies = this.movies;
+
+      // Appliquer le filtre par genre si un genre est sélectionné
+      if (this.selectedGenre) {
+        filteredMovies = filteredMovies.filter(movie => {
+          return movie.genres.includes(this.selectedGenre);
+        });
+      }
+
+      const start = (this.pageNumber - 1) * this.pageSize;
+      const end = start + this.pageSize;
+
+      return filteredMovies.slice(start, end);
     },
   },
   methods: {
@@ -75,9 +91,29 @@ export default {
       this.selectedMovie = movie;
       this.$router.push({ name: "movie", params: { id: movie.id, title: movie.title } });
     },
+    filterByGenre() {
+      this.pageNumber = 1;
+      this.selectedMovie = null;
+    },
   },
   mounted() {
     document.title = 'Liste de films Page ' + this.pageNumber + ' - TP2'
+    const options = {
+      method: 'GET',
+      headers: {
+        accept: 'application/json',
+        Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3MDlhYzI5ZDBiOTU3MjAyYzA5YjcwMmZlY2JkOThjMyIsInN1YiI6IjY1ODA3ZGY5M2E0OGM1M2JlNmFmNjY5OSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.LxmQnNsAWPYT97Z0C44pRkH6DbWer5vt92t8u1-oMjY'
+      }
+    };
+
+    fetch('https://api.themoviedb.org/3/genre/movie/list?language=en', options)
+        .then(response => response.json())
+        .then(response => {
+          // Extract genre names and update the genres array
+          this.genres = response.genres.map(genre => genre.name);
+        })
+        .catch(err => console.error(err));
+
     getMovie(this.selectedMovie).then(response => this.movieDetailed = response);
   },
 };

@@ -16,7 +16,7 @@ export default {
 
   },
   mounted() {
-    document.title = 'TP2 Prog Spec';
+    document.title = 'TP2 Prog Spec Accueil';
   },
 };
 </script>

@@ -32,10 +32,18 @@ export default {
   mounted() {
     getMovie(this.id).then(response => {
       this.movie = response;
+      console.log(this.movie);
       document.title = 'Fiche de ' + this.movie.title + ' - TP2';
     });
+  },
+  methods: {
+    getMoviePosterPath() {
+      return this.movie.poster_path
+        ? `https://image.tmdb.org/t/p/w200/${this.movie.poster_path}`
+        : 'https://placehold.co/200x200';
+    },
   },
 };
 </script>
 
-<style lang="css" scoped></style>
+<style lang="css" scoped;></style>
