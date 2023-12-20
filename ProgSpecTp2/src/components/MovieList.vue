@@ -60,14 +60,15 @@ export default {
       selectedGenre: false,
       message: "",
       nomToggle: "date de sortie ascendant",
-      valeurToggle: "descendant"
+      valeurToggle: "descendant",
+      arrayMovies: [],
     };
   },
   computed: {
     // selectedGenre: false,
     pageCount() {
-      let nbMovies = this.movies.length;
-      return Math.floor(nbMovies / this.pageSize);
+      let nbMovies = this.arrayMovies.length;
+      return Math.ceil(nbMovies / this.pageSize);
     },
     paginatedMovies() {
       let filteredMovies = this.movies;
@@ -97,6 +98,8 @@ export default {
       else {
         this.message = "";
       }
+
+      this.arrayMovies = filteredMovies;
 
       return filteredMovies.slice(start, end);
     },
