@@ -9,6 +9,8 @@ const options = {
     }
 };
 
+
+
 const RESOURCE_NAME = "movie";
 
 export async function getAllMovies() {
