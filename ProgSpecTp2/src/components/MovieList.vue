@@ -24,7 +24,7 @@
         }"
           @click="onSelect(movie)"
       >
-        <span class="pop"><img :src="movie.poster_path ? movie.poster_path : 'https://placehold.co/100x100'" width="100"  style="float: left" /></span>
+        <span class="pop"><img :src="movie.poster_path ? `https://image.tmdb.org/t/p/w200/${movie.poster_path}` : 'https://placehold.co/100x100'" width="100"  style="float: left" /></span>
         <span class="title">{{ movie.title }}</span>
         <span class="date">{{ movie.release_date }}</span>
       </li>
@@ -56,14 +56,13 @@ export default {
     };
   },
   computed: {
+    selectedGenre: false,
     pageCount() {
       let nbMovies = this.movies.length;
       return Math.floor(nbMovies / this.pageSize);
     },
     paginatedMovies() {
       let filteredMovies = this.movies;
-
-      // Appliquer le filtre par genre si un genre est sélectionné
       if (this.selectedGenre) {
         filteredMovies = filteredMovies.filter(movie => {
           return movie.genres.includes(this.selectedGenre);
